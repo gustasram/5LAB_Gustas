@@ -1,0 +1,2 @@
+rootProject.name='AsyncTaskWithApiExample'
+include ':app'
