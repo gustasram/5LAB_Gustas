@@ -44,7 +44,7 @@ public class ApiDataReader {
         return result;
     }
 
-    //Routine that creates and calls GET request to web page
+    // Routine that creates and calls GET request to web page
     private static InputStream downloadUrlContent(String urlString) throws IOException {
         URL url = new URL(urlString);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
