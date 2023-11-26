@@ -83,11 +83,15 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     final String result = ApiDataReader.getValuesFromApi(Constants.FLOATRATES_API_URL);
-                    //final String result = ApiDataReader.getValuesFromApi(Constants.METEOLT_API_URL);
+                    final String selectedCurrency = spinnerCurrency.getSelectedItem().toString();
+
+                    // Filter the result based on the selected currency
+                    String filteredResult = filterResultByCurrency(result, selectedCurrency);
+
                     Runnable updateUIRunnable = new Runnable() {
                         @Override
                         public void run() {
-                            tvStatus.setText(getString(R.string.data_loaded) + result);
+                            tvStatus.setText(getString(R.string.data_loaded) + filteredResult);
                         }
                     };
                     runOnUiThread(updateUIRunnable);
@@ -99,15 +103,22 @@ public class MainActivity extends AppCompatActivity {
 
         Thread thread = new Thread(getDataAndDisplayRunnable);
         thread.start();
-
-        //with Lambdas --->
-        //        new Thread(() -> {
-        //            try {
-        //                final String result = ApiDataReader.getValuesFromApi(Constants.FLOATRATES_API_URL);
-        //                runOnUiThread(() -> tvStatus.setText(getString(R.string.data_loaded) + result));
-        //            } catch (IOException ex) {
-        //                runOnUiThread(() -> tvStatus.setText("Error occured:" + ex.getMessage()));
-        //            }
-        //        }).start();
     }
+
+    // Method to filter the result based on the selected currency
+    private String filterResultByCurrency(String result, String selectedCurrency) {
+        // Split the result into lines
+        String[] lines = result.split("\n");
+
+        // Filter lines based on the selected currency
+        StringBuilder filteredResult = new StringBuilder();
+        for (String line : lines) {
+            if (line.contains(selectedCurrency)) {
+                filteredResult.append(line).append("\n");
+            }
+        }
+
+        return filteredResult.toString();
+    }
+
 }
